@@ -46,6 +46,7 @@
             <dl class="detail-list">
                 <div><dt>Nama</dt><dd>{{ $order->customer->nama }}</dd></div>
                 <div><dt>Nomor HP</dt><dd>{{ $order->customer->no_hp }}</dd></div>
+                <div><dt>Email</dt><dd>{{ $order->customer->email ?: 'Tidak diisi' }}</dd></div>
                 <div><dt>Alamat</dt><dd>{{ $order->customer->alamat ?: 'Belum diisi' }}</dd></div>
                 <div><dt>Catatan pembeli</dt><dd>{{ $order->catatan ?: 'Tidak ada' }}</dd></div>
             </dl>
