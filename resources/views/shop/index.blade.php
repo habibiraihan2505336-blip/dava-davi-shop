@@ -3,20 +3,20 @@
 @section('content')
 <section class="hero" aria-labelledby="hero-title">
     <div class="hero-copy">
-        <p class="kicker">Renyahnya teman di rumah</p>
-        <h1 id="hero-title">Tempe, dibikin renyah. Cerita, jadi lebih seru.</h1>
-        <p>Pilih camilan untuk teman ngobrol atau waktu santai. Nama, komposisi, dan harga mengikuti label kemasan Dava Davi; stok masih angka sementara.</p>
-        <a class="button" href="#produk">Pilih camilan</a>
-        <span class="hero-note">Dava Davi · Keripik tempe</span>
+        <p class="kicker">Oleh-oleh khas Malang</p>
+        <h1 id="hero-title">Keripik tempe yang bikin susah move on.</h1>
+        <p>Tiga varian dari Dava Davi: ada yang dari sagu, ada yang menjes, ada yang tempe biasa. Tinggal pilih yang paling cocok buat mood kamu.</p>
+        <a class="button" href="#produk">Cek variannya</a>
+        <span class="hero-note">Dava Davi · Malang</span>
     </div>
     <div class="hero-art" role="img" aria-label="Ilustrasi kemasan keripik tempe, bukan foto produk asli">
         <span class="orbit orbit-one" aria-hidden="true"></span><span class="orbit orbit-two" aria-hidden="true"></span>
         <div class="hero-pack"><span class="pack-top">DARI DAPUR DAVA DAVI</span><span class="pack-window" aria-hidden="true"><i></i><i></i><i></i></span><span class="pack-name">Keripik<br>Tempe</span><span class="pack-flavor">ILUSTRASI KEMASAN</span></div>
-        <div class="art-caption">Ilustrasi kemasan. Foto asli tiap produk ada di katalog.</div>
+        <div class="art-caption">Ilustrasi kemasan. Foto aslinya ada di katalog bawah.</div>
     </div>
 </section>
 <section class="section catalog" id="produk" aria-labelledby="products-heading">
-    <div class="section-head catalog-head"><div><p class="kicker">Katalog</p><h2 id="products-heading">Pilih yang cocok buatmu.</h2><p>Kategori, harga, dan stok berasal dari basis data toko.</p></div>
+    <div class="section-head catalog-head"><div><p class="kicker">Pilih-pilih dulu</p><h2 id="products-heading">Mau coba yang mana?</h2><p>Harga sudah nempel per bungkus. Pilih jumlahnya, langsung masuk keranjang.</p></div>
         <div class="catalog-tools">
             <label class="search-wrap"><span class="sr-only">Cari produk</span><input type="search" placeholder="Cari produk" autocomplete="off" data-product-search aria-label="Cari produk"><span aria-hidden="true">⌕</span></label>
             <div class="filter-group" role="group" aria-label="Filter kategori">
@@ -28,9 +28,9 @@
         </div>
     </div>
     <p class="catalog-count" aria-live="polite" data-product-count></p>
-    <div class="placeholder-note" style="margin-bottom:20px">Nama, komposisi, dan harga mengikuti label kemasan. Stok masih angka sementara sampai pemilik mengonfirmasi jumlahnya.</div>
+    <div class="placeholder-note" style="margin-bottom:20px">Nama, komposisi, dan harga ngikutin label kemasan. Stok masih angka sementara ya.</div>
     @if ($products->isEmpty())
-        <div class="empty"><h2>Produk belum tersedia</h2><p>Belum ada produk aktif pada kategori ini. Tambahkan lewat panel admin atau pilih kategori lain.</p><a class="button secondary" href="{{ route('shop.home') }}#produk">Lihat semua produk</a></div>
+        <div class="empty"><h2>Belum ada produk di sini</h2><p>Coba kategori lain, atau balik ke semua produk.</p><a class="button secondary" href="{{ route('shop.home') }}#produk">Lihat semua produk</a></div>
     @else
         <div class="products">
             @foreach ($products as $product)
@@ -49,11 +49,11 @@
                 </article>
             @endforeach
         </div>
-        <div class="empty filter-empty" hidden data-no-results><h2>Produk tidak ditemukan</h2><p>Coba kata pencarian lain atau pilih kategori lain.</p></div>
+        <div class="empty filter-empty" hidden data-no-results><h2>Nggak ketemu</h2><p>Coba kata lain, atau pilih semua kategori.</p></div>
     @endif
 </section>
-<section class="story" id="cerita" aria-labelledby="story-heading"><div class="wrap story-inner"><div class="story-seal" aria-hidden="true"><span>D</span><small>DAVA DAVI</small></div><div><p class="kicker">Dava Davi</p><h2 id="story-heading">Satu teman renyah untuk waktu santai.</h2><p>Bagian ini menunggu cerita asli dari pemilik usaha. Tambahkan asal usaha dan proses produksi setelah detailnya dikonfirmasi.</p><a href="#produk" class="text-link">Lihat katalog</a></div></div></section>
-<dialog class="product-dialog" aria-labelledby="detail-title" data-product-dialog><form method="dialog"><button class="dialog-close" aria-label="Tutup detail produk">Tutup</button></form><p class="kicker">Detail produk</p><h2 id="detail-title" data-detail-title></h2><p data-detail-copy></p><p class="detail-price" data-detail-price></p><p class="placeholder-note">Harga dan stok berasal dari basis data toko dan masih data uji.</p><form method="post" action="{{ route('cart.add') }}" class="dialog-buy" data-dialog-form>@csrf<input type="hidden" name="product_id" data-detail-id><p class="dialog-error" role="alert" data-dialog-error hidden></p><label for="detail-quantity">Jumlah</label><input id="detail-quantity" type="number" name="quantity" value="1" min="1" max="20"><button type="submit" class="button">Tambah ke keranjang</button></form></dialog>
+<section class="story" id="cerita" aria-labelledby="story-heading"><div class="wrap story-inner"><div class="story-seal" aria-hidden="true"><span>D</span><small>DAVA DAVI</small></div><div><p class="kicker">Cerita</p><h2 id="story-heading">Dari Malang, buat teman santai kamu.</h2><p>Cerita lengkap Dava Davi belum masuk. Nanti diisi soal asal-usul dan cara bikinnya, langsung dari pemiliknya.</p><a href="#produk" class="text-link">Cek variannya</a></div></div></section>
+<dialog class="product-dialog" aria-labelledby="detail-title" data-product-dialog><form method="dialog"><button class="dialog-close" aria-label="Tutup detail produk">Tutup</button></form><p class="kicker">Detail varian</p><h2 id="detail-title" data-detail-title></h2><p data-detail-copy></p><p class="detail-price" data-detail-price></p><p class="placeholder-note">Harga dan stok dari data toko. Stok masih angka sementara.</p><form method="post" action="{{ route('cart.add') }}" class="dialog-buy" data-dialog-form>@csrf<input type="hidden" name="product_id" data-detail-id><p class="dialog-error" role="alert" data-dialog-error hidden></p><label for="detail-quantity">Jumlah</label><input id="detail-quantity" type="number" name="quantity" value="1" min="1" max="20"><button type="submit" class="button">Masukkan keranjang</button></form></dialog>
 <div class="toast" role="status" aria-live="polite" data-toast hidden></div>
 @endsection
 @section('scripts')
@@ -72,7 +72,7 @@
             card.hidden = !matchesText;
             if (!card.hidden) visible += 1;
         });
-        if (count) count.textContent = `${visible} produk ditampilkan`;
+        if (count) count.textContent = `${visible} produk muncul`;
         if (empty) empty.hidden = visible > 0;
     };
     search?.addEventListener('input', updateCatalog);

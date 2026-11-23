@@ -24,7 +24,7 @@
     <header class="header"><nav class="wrap nav" aria-label="Navigasi utama">
         <a class="brand" href="{{ route('shop.home') }}">Dava Davi<small>KERIPIK TEMPE</small></a>
         <div class="nav-right">
-            <div class="navlinks" id="primary-nav"><a href="{{ route('shop.home') }}#produk">Produk</a><a href="{{ route('shop.home') }}#cerita">Tentang</a>@auth('pelanggan')<a href="{{ route('akun.index') }}">Akun</a>@else<a href="{{ route('pelanggan.login') }}">Masuk</a>@endauth<a href="{{ route('admin.login') }}">Masuk pengelola</a></div>
+            <div class="navlinks" id="primary-nav"><a href="{{ route('shop.home') }}#produk">Produk</a><a href="{{ route('shop.home') }}#cerita">Cerita</a>@auth('pelanggan')<a href="{{ route('akun.index') }}">Akun</a>@else<a href="{{ route('pelanggan.login') }}">Masuk</a>@endauth<a href="{{ route('admin.login') }}">Masuk pengelola</a></div>
             <a class="cart-link" href="{{ route('cart.index') }}">Keranjang <span class="cart-count" data-cart-count aria-label="Jumlah produk di keranjang">{{ array_sum(session('cart', [])) }}</span></a>
             <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" data-menu-toggle>Menu</button>
         </div>

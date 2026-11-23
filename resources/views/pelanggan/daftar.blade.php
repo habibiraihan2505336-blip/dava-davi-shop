@@ -4,7 +4,7 @@
 <section class="content" style="max-width:620px">
     <p class="kicker">Akun pembeli</p>
     <h1>Daftar akun</h1>
-    <p style="color:var(--muted)">Akun dipakai untuk menyimpan riwayat pesanan dan mengulang pesanan lama. Data hanya dipakai untuk keperluan pesanan.</p>
+    <p style="color:var(--muted)">Akun cuma buat nyimpen riwayat pesanan dan pesan ulang. Datanya nggak dipakai buat yang lain.</p>
 
     <form class="form-card" method="post" action="{{ route('pelanggan.daftar.attempt') }}" style="margin-top:22px">
         @csrf

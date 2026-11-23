@@ -4,7 +4,7 @@
 <section class="content" style="max-width:560px">
     <p class="kicker">Akun pembeli</p>
     <h1>Masuk</h1>
-    <p style="color:var(--muted)">Masuk agar pesanan tercatat di riwayat akunmu. Tanpa akun pun kamu tetap bisa memesan sebagai tamu.</p>
+    <p style="color:var(--muted)">Masuk biar pesananmu kesimpan di riwayat. Mau pesan tanpa akun? Bisa banget.</p>
 
     <form class="form-card" method="post" action="{{ route('pelanggan.login.attempt') }}" style="margin-top:22px">
         @csrf

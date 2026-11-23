@@ -9,7 +9,7 @@
         <div>
             <h2 style="font:500 26px var(--serif);color:var(--brown-dark);margin:0 0 14px">Riwayat pesanan</h2>
             @if ($pesanan->isEmpty())
-                <div class="empty"><h2>Belum ada pesanan</h2><p>Pesanan yang kamu buat dengan akun ini akan muncul di sini.</p><a class="button" href="{{ route('shop.home') }}#produk">Pilih produk</a></div>
+                <div class="empty"><h2>Belum ada pesanan nih</h2><p>Pesanan yang kamu buat pakai akun ini bakal muncul di sini.</p><a class="button" href="{{ route('shop.home') }}#produk">Lihat varian</a></div>
             @else
                 @foreach ($pesanan as $order)
                     <article class="pesanan-card">
