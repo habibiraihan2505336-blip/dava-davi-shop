@@ -101,7 +101,7 @@
     @if (session('error'))<div class="notice error" role="alert">{{ session('error') }}</div>@endif
     @if ($errors->any())<div class="notice error" role="alert">Periksa kembali isian. {{ $errors->first() }}</div>@endif
     @yield('content')
-    <p class="footer-note">Data pada panel ini berasal dari basis data Supabase proyek Dava Davi. Harga dan stok masih data uji sampai pemilik mengonfirmasi.</p>
+    <p class="footer-note">Data pada panel ini berasal dari basis data Supabase proyek Dava Davi. Nama dan harga mengikuti label kemasan; stok masih angka sementara.</p>
 </main>
 @yield('scripts')
 </body>

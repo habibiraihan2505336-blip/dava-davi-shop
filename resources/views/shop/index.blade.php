@@ -5,14 +5,14 @@
     <div class="hero-copy">
         <p class="kicker">Renyahnya teman di rumah</p>
         <h1 id="hero-title">Tempe, dibikin renyah. Cerita, jadi lebih seru.</h1>
-        <p>Pilih camilan untuk teman ngobrol atau waktu santai. Harga dan stok di halaman ini dibaca dari basis data toko dan masih berisi data uji.</p>
+        <p>Pilih camilan untuk teman ngobrol atau waktu santai. Nama, komposisi, dan harga mengikuti label kemasan Dava Davi; stok masih angka sementara.</p>
         <a class="button" href="#produk">Pilih camilan</a>
         <span class="hero-note">Dava Davi · Keripik tempe</span>
     </div>
     <div class="hero-art" role="img" aria-label="Ilustrasi kemasan keripik tempe, bukan foto produk asli">
         <span class="orbit orbit-one" aria-hidden="true"></span><span class="orbit orbit-two" aria-hidden="true"></span>
         <div class="hero-pack"><span class="pack-top">DARI DAPUR DAVA DAVI</span><span class="pack-window" aria-hidden="true"><i></i><i></i><i></i></span><span class="pack-name">Keripik<br>Tempe</span><span class="pack-flavor">ILUSTRASI KEMASAN</span></div>
-        <div class="art-caption">Ilustrasi. Foto kemasan asli belum tersedia.</div>
+        <div class="art-caption">Ilustrasi kemasan. Foto asli tiap produk ada di katalog.</div>
     </div>
 </section>
 <section class="section catalog" id="produk" aria-labelledby="products-heading">
@@ -28,7 +28,7 @@
         </div>
     </div>
     <p class="catalog-count" aria-live="polite" data-product-count></p>
-    <div class="placeholder-note" style="margin-bottom:20px">Data uji: nama, harga, dan stok masih contoh dari rancangan basis data. Konfirmasi kepada pemilik sebelum menerima pesanan.</div>
+    <div class="placeholder-note" style="margin-bottom:20px">Nama, komposisi, dan harga mengikuti label kemasan. Stok masih angka sementara sampai pemilik mengonfirmasi jumlahnya.</div>
     @if ($products->isEmpty())
         <div class="empty"><h2>Produk belum tersedia</h2><p>Belum ada produk aktif pada kategori ini. Tambahkan lewat panel admin atau pilih kategori lain.</p><a class="button secondary" href="{{ route('shop.home') }}#produk">Lihat semua produk</a></div>
     @else
