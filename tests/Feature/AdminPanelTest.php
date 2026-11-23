@@ -8,6 +8,8 @@ use App\Models\Customer;
 use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
@@ -298,5 +300,149 @@ class AdminPanelTest extends TestCase
         $respons->assertSessionHasErrors('email');
         $this->assertStringContainsString('Terlalu banyak', session('errors')->first('email'));
         $this->assertGuest('admin');
+    }
+
+    public function test_admin_dapat_mengunggah_foto_produk(): void
+    {
+        Storage::fake('public');
+        $admin = $this->admin();
+        $produk = $this->pesanan()->items->first()->product;
+
+        $this->actingAs($admin, 'admin')
+            ->put(route('admin.produk.update', $produk), [
+                'category_id' => $produk->category_id,
+                'nama_produk' => $produk->nama_produk,
+                'harga' => $produk->harga,
+                'stok' => $produk->stok,
+                'status_aktif' => '1',
+                'gambar' => UploadedFile::fake()->image('kemasan.jpg', 600, 800),
+            ])->assertRedirect(route('admin.produk.edit', $produk));
+
+        $produk->refresh();
+        $this->assertNotNull($produk->gambar);
+        $this->assertStringStartsWith('produk/', $produk->gambar);
+        Storage::disk('public')->assertExists($produk->gambar);
+    }
+
+    public function test_admin_dapat_menghapus_foto_produk(): void
+    {
+        Storage::fake('public');
+        $admin = $this->admin();
+        $produk = $this->pesanan()->items->first()->product;
+
+        Storage::disk('public')->put('produk/lama.jpg', 'isi');
+        $produk->update(['gambar' => 'produk/lama.jpg']);
+
+        $this->actingAs($admin, 'admin')
+            ->put(route('admin.produk.update', $produk), [
+                'category_id' => $produk->category_id,
+                'nama_produk' => $produk->nama_produk,
+                'harga' => $produk->harga,
+                'stok' => $produk->stok,
+                'status_aktif' => '1',
+                'hapus_gambar' => '1',
+            ])->assertRedirect(route('admin.produk.edit', $produk));
+
+        $this->assertNull($produk->fresh()->gambar);
+        Storage::disk('public')->assertMissing('produk/lama.jpg');
+    }
+
+    public function test_berkas_selain_gambar_ditolak(): void
+    {
+        Storage::fake('public');
+        $admin = $this->admin();
+        $produk = $this->pesanan()->items->first()->product;
+
+        $this->actingAs($admin, 'admin')
+            ->put(route('admin.produk.update', $produk), [
+                'category_id' => $produk->category_id,
+                'nama_produk' => $produk->nama_produk,
+                'harga' => $produk->harga,
+                'stok' => $produk->stok,
+                'status_aktif' => '1',
+                'gambar' => UploadedFile::fake()->create('catatan.pdf', 40, 'application/pdf'),
+            ])->assertSessionHasErrors('gambar');
+
+        $this->assertNull($produk->fresh()->gambar);
+    }
+
+    public function test_pembatalan_pesanan_mengembalikan_stok(): void
+    {
+        $admin = $this->admin();
+        $order = $this->pesanan();
+        $produk = $order->items->first()->product;
+
+        // Stok setelah checkout: 10 dikurangi 2 bungkus.
+        $produk->update(['stok' => 8]);
+
+        $this->actingAs($admin, 'admin')
+            ->put(route('admin.pesanan.update', $order), [
+                'status' => 'batal',
+                'payment_status' => 'belum_bayar',
+                'ongkir' => 0,
+            ])->assertRedirect(route('admin.pesanan.show', $order));
+
+        $this->assertSame(10, $produk->fresh()->stok);
+    }
+
+    public function test_mengaktifkan_kembali_pesanan_batal_mengurangi_stok_lagi(): void
+    {
+        $admin = $this->admin();
+        $order = $this->pesanan();
+        $produk = $order->items->first()->product;
+
+        $produk->update(['stok' => 8]);
+        $order->update(['status' => 'batal']);
+        $produk->update(['stok' => 10]);
+
+        $this->actingAs($admin, 'admin')
+            ->put(route('admin.pesanan.update', $order), [
+                'status' => 'baru',
+                'payment_status' => 'belum_bayar',
+                'ongkir' => 0,
+            ])->assertRedirect(route('admin.pesanan.show', $order));
+
+        $this->assertSame(8, $produk->fresh()->stok);
+    }
+
+    public function test_menyimpan_status_yang_sama_tidak_mengubah_stok_dua_kali(): void
+    {
+        $admin = $this->admin();
+        $order = $this->pesanan();
+        $produk = $order->items->first()->product;
+
+        $produk->update(['stok' => 8]);
+        $order->update(['status' => 'batal']);
+        $produk->update(['stok' => 10]);
+
+        $this->actingAs($admin, 'admin')
+            ->put(route('admin.pesanan.update', $order), [
+                'status' => 'batal',
+                'payment_status' => 'belum_bayar',
+                'ongkir' => 0,
+            ])->assertRedirect(route('admin.pesanan.show', $order));
+
+        $this->assertSame(10, $produk->fresh()->stok);
+    }
+
+    public function test_pesanan_batal_tidak_bisa_diaktifkan_bila_stok_kurang(): void
+    {
+        $admin = $this->admin();
+        $order = $this->pesanan();
+        $produk = $order->items->first()->product;
+
+        $order->update(['status' => 'batal']);
+        $produk->update(['stok' => 1]);
+
+        $this->actingAs($admin, 'admin')
+            ->put(route('admin.pesanan.update', $order), [
+                'status' => 'baru',
+                'payment_status' => 'belum_bayar',
+                'ongkir' => 0,
+            ])->assertRedirect(route('admin.pesanan.show', $order))
+            ->assertSessionHas('error');
+
+        $this->assertSame('batal', $order->fresh()->status);
+        $this->assertSame(1, $produk->fresh()->stok);
     }
 }

@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
@@ -69,14 +71,56 @@ class PesananController extends Controller
             $data['paid_at'] = null;
         }
 
-        $order->update($data);
-        $order->refresh()->load('items');
+        $statusLama = $order->status;
 
-        // Total selalu subtotal item ditambah ongkir, tidak pernah diketik manual.
-        $order->update(['total' => max(1, $order->totalSeharusnya())]);
+        try {
+            DB::transaction(function () use ($order, $data, $statusLama): void {
+                $order->update($data);
+                $order->refresh()->load('items');
+
+                // Stok dikurangi saat checkout, jadi pembatalan harus mengembalikannya.
+                // Mengaktifkan kembali pesanan yang batal berarti mengurangi stok lagi.
+                if ($statusLama !== 'batal' && $order->status === 'batal') {
+                    foreach ($order->items as $item) {
+                        Product::query()->whereKey($item->product_id)->increment('stok', $item->jumlah);
+                    }
+                } elseif ($statusLama === 'batal' && $order->status !== 'batal') {
+                    foreach ($order->items as $item) {
+                        $produk = Product::query()->lockForUpdate()->find($item->product_id);
+
+                        if ($produk === null || $produk->stok < $item->jumlah) {
+                            throw new \DomainException(
+                                'Stok '.($item->product?->nama_produk ?? 'produk').' tidak cukup untuk mengaktifkan kembali pesanan ini.'
+                            );
+                        }
+                    }
+
+                    foreach ($order->items as $item) {
+                        Product::query()->whereKey($item->product_id)->decrement('stok', $item->jumlah);
+                    }
+                }
+
+                // Total selalu subtotal item ditambah ongkir, tidak pernah diketik manual.
+                $order->update(['total' => max(1, $order->totalSeharusnya())]);
+            });
+        } catch (\DomainException $exception) {
+            return redirect()
+                ->route('admin.pesanan.show', $order)
+                ->with('error', $exception->getMessage());
+        }
+
+        $pesan = 'Pesanan '.$order->kode_pesanan.' diperbarui.';
+
+        if ($statusLama !== 'batal' && $order->status === 'batal') {
+            $pesan .= ' Stok produk sudah dikembalikan.';
+        }
+
+        if ($statusLama === 'batal' && $order->status !== 'batal') {
+            $pesan .= ' Stok produk dikurangi lagi.';
+        }
 
         return redirect()
             ->route('admin.pesanan.show', $order)
-            ->with('success', 'Pesanan '.$order->kode_pesanan.' diperbarui.');
+            ->with('success', $pesan);
     }
 }

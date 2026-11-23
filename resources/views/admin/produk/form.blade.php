@@ -6,11 +6,11 @@
 <p class="lede">Slug dibuat otomatis dari nama produk. Harga dan stok wajib angka bulat rupiah tanpa titik.</p>
 
 @if ($product->exists)
-    <form method="post" action="{{ route('admin.produk.update', $product) }}" class="panel stack" style="max-width:640px">
+    <form method="post" action="{{ route('admin.produk.update', $product) }}" class="panel stack" style="max-width:640px" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 @else
-    <form method="post" action="{{ route('admin.produk.store') }}" class="panel stack" style="max-width:640px">
+    <form method="post" action="{{ route('admin.produk.store') }}" class="panel stack" style="max-width:640px" enctype="multipart/form-data">
         @csrf
 @endif
         <div class="field">
@@ -42,6 +42,20 @@
             <label for="deskripsi">Keterangan</label>
             <textarea id="deskripsi" name="deskripsi" maxlength="2000">{{ old('deskripsi', $product->deskripsi) }}</textarea>
             @error('deskripsi')<p class="field-error">{{ $message }}</p>@enderror
+        </div>
+        <div class="field">
+            <label for="gambar">Foto kemasan</label>
+            @if ($product->gambar)
+                <img class="thumb" src="{{ asset('storage/'.$product->gambar) }}" alt="Foto {{ $product->nama_produk }}" width="120" height="160">
+            @else
+                <p class="hint">Belum ada foto. Katalog akan memakai ilustrasi.</p>
+            @endif
+            <input id="gambar" name="gambar" type="file" accept="image/jpeg,image/png,image/webp">
+            <span class="hint">JPG, PNG, atau WEBP, maksimal 2 MB. Unggah berkas baru untuk mengganti foto lama.</span>
+            @error('gambar')<p class="field-error">{{ $message }}</p>@enderror
+            @if ($product->gambar)
+                <label style="display:flex;align-items:center;gap:9px;min-height:44px;font-size:14px"><input type="checkbox" name="hapus_gambar" value="1" style="width:20px;min-height:20px"> Hapus foto ini</label>
+            @endif
         </div>
         <label class="check" style="display:flex;align-items:center;gap:9px;font-size:14px">
             <input type="checkbox" name="status_aktif" value="1" style="width:20px;min-height:20px" @checked(old('status_aktif', $product->status_aktif))>

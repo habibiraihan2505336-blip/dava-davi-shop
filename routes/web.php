@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\KategoriController;
+use App\Http\Controllers\Admin\LaporanController;
 use App\Http\Controllers\Admin\PesananController;
 use App\Http\Controllers\Admin\ProdukController;
 use App\Http\Controllers\Pelanggan\AkunController;
@@ -62,5 +63,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('kategori', [KategoriController::class, 'store'])->name('kategori.store');
         Route::put('kategori/{category}', [KategoriController::class, 'update'])->name('kategori.update');
         Route::delete('kategori/{category}', [KategoriController::class, 'destroy'])->name('kategori.destroy');
+
+        Route::get('laporan', [LaporanController::class, 'index'])->name('laporan.index');
     });
 });

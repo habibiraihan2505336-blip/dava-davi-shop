@@ -8,6 +8,9 @@ use App\Models\Product;
 use App\Models\ProductPriceTier;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
@@ -38,6 +41,7 @@ class ProdukController extends Controller
     {
         $data = $this->validated($request);
         $data['slug'] = $this->uniqueSlug($data['nama_produk']);
+        $data['gambar'] = $this->simpanGambar($request, null);
 
         $product = Product::create($data);
 
@@ -60,9 +64,40 @@ class ProdukController extends Controller
             $data['slug'] = $this->uniqueSlug($data['nama_produk'], $product->id);
         }
 
+        $data['gambar'] = $this->simpanGambar($request, $product);
+
         $product->update($data);
 
         return redirect()->route('admin.produk.edit', $product)->with('success', 'Produk diperbarui.');
+    }
+
+    /**
+     * Menyimpan foto baru, menghapus foto lama, atau mengosongkan kolom gambar.
+     * Mengembalikan nilai kolom gambar yang akan disimpan.
+     */
+    private function simpanGambar(Request $request, ?Product $product): ?string
+    {
+        if ($request->boolean('hapus_gambar')) {
+            if ($product?->gambar) {
+                Storage::disk('public')->delete($product->gambar);
+            }
+
+            return null;
+        }
+
+        $berkas = $request->file('gambar');
+
+        if (! $berkas instanceof UploadedFile) {
+            return $product?->gambar;
+        }
+
+        $jalur = $berkas->store('produk', 'public');
+
+        if ($product?->gambar) {
+            Storage::disk('public')->delete($product->gambar);
+        }
+
+        return $jalur;
     }
 
     public function storeTier(Request $request, Product $product): RedirectResponse
@@ -116,6 +151,8 @@ class ProdukController extends Controller
             'stok' => ['required', 'integer', 'min:0', 'max:100000'],
             'deskripsi' => ['nullable', 'string', 'max:2000'],
             'status_aktif' => ['nullable', 'boolean'],
+            'gambar' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+            'hapus_gambar' => ['nullable', 'boolean'],
         ], [
             'category_id.required' => 'Pilih kategori produk.',
             'category_id.exists' => 'Kategori yang dipilih tidak ditemukan.',
@@ -126,11 +163,14 @@ class ProdukController extends Controller
             'stok.required' => 'Stok wajib diisi.',
             'stok.max' => 'Stok maksimal 100.000 bungkus.',
             'deskripsi.max' => 'Keterangan maksimal 2000 karakter.',
+            'gambar.image' => 'Berkas yang diunggah harus berupa gambar.',
+            'gambar.mimes' => 'Format foto harus JPG, PNG, atau WEBP.',
+            'gambar.max' => 'Ukuran foto maksimal 2 MB.',
         ]);
 
         $data['status_aktif'] = $request->boolean('status_aktif');
 
-        return $data;
+        return Arr::except($data, ['gambar', 'hapus_gambar']);
     }
 
     private function uniqueSlug(string $nama, ?int $abaikanId = null): string

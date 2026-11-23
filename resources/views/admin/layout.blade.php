@@ -45,6 +45,8 @@
         .field{display:grid;gap:6px}.field label{font-size:13px;font-weight:700}
         .field input,.field select,.field textarea{width:100%;min-height:44px;padding:9px 11px;border:1px solid #806b55;border-radius:3px;background:#fffdf7;color:var(--ink)}
         .field textarea{min-height:90px;resize:vertical}.field-error{color:#692e1d;font-size:13px}.hint{color:var(--muted);font-size:12px}
+        .thumb{display:block;width:120px;height:auto;max-height:160px;object-fit:contain;border:1px solid #d8c5a6;background:#f4ead7}
+        .field input[type=file]{padding:9px 11px;background:#fffdf7;min-height:auto}
         .button{display:inline-flex;min-height:44px;align-items:center;justify-content:center;padding:9px 18px;border:1px solid var(--brown);border-radius:4px;background:var(--brown);color:#fffdf7;font-weight:700}
         .button:hover{background:var(--brown-dark)}.button.secondary{background:transparent;color:var(--brown)}.button.secondary:hover{background:#f1e7d6}
         .empty{padding:26px;border:1px dashed #a88e6f;background:#fffaf0;color:var(--muted)}
@@ -88,6 +90,7 @@
             <a href="{{ route('admin.pesanan.index') }}" @if (request()->routeIs('admin.pesanan.*')) aria-current="page" @endif>Pesanan</a>
             <a href="{{ route('admin.produk.index') }}" @if (request()->routeIs('admin.produk.*')) aria-current="page" @endif>Produk</a>
             <a href="{{ route('admin.kategori.index') }}" @if (request()->routeIs('admin.kategori.*')) aria-current="page" @endif>Kategori</a>
+            <a href="{{ route('admin.laporan.index') }}" @if (request()->routeIs('admin.laporan.*')) aria-current="page" @endif>Laporan</a>
             <a href="{{ route('shop.home') }}">Lihat toko</a>
         </nav>
         <div class="who">
