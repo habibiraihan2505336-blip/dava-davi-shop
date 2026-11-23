@@ -29,7 +29,10 @@ class ShopController extends Controller
 
         return view('shop.index', [
             'products' => $products,
-            'categories' => Category::query()->orderBy('nama_kategori')->get(),
+            'categories' => Category::query()
+                ->whereHas('products', fn ($query) => $query->aktif())
+                ->orderBy('nama_kategori')
+                ->get(),
             'kategoriAktif' => $kategori,
         ]);
     }
