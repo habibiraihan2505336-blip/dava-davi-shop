@@ -23,7 +23,6 @@
         </div>
     </div>
     <p class="catalog-count" aria-live="polite" data-product-count></p>
-    <div class="placeholder-note" style="margin-bottom:20px">Nama, komposisi, dan harga ngikutin label kemasan. Stok masih angka sementara ya.</div>
     @if ($products->isEmpty())
         <div class="empty"><h2>Belum ada produk di sini</h2><p>Coba kategori lain, atau balik ke semua produk.</p><a class="button secondary" href="{{ route('shop.home') }}#produk">Lihat semua produk</a></div>
     @else
