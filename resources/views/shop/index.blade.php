@@ -9,11 +9,6 @@
         <a class="button" href="#produk">Cek variannya</a>
         <span class="hero-note">Dava Davi · Malang</span>
     </div>
-    <div class="hero-art" role="img" aria-label="Ilustrasi kemasan keripik tempe, bukan foto produk asli">
-        <span class="orbit orbit-one" aria-hidden="true"></span><span class="orbit orbit-two" aria-hidden="true"></span>
-        <div class="hero-pack"><span class="pack-top">DARI DAPUR DAVA DAVI</span><span class="pack-window" aria-hidden="true"><i></i><i></i><i></i></span><span class="pack-name">Keripik<br>Tempe</span><span class="pack-flavor">ILUSTRASI KEMASAN</span></div>
-        <div class="art-caption">Ilustrasi kemasan. Foto aslinya ada di katalog bawah.</div>
-    </div>
 </section>
 <section class="section catalog" id="produk" aria-labelledby="products-heading">
     <div class="section-head catalog-head"><div><p class="kicker">Pilih-pilih dulu</p><h2 id="products-heading">Mau coba yang mana?</h2><p>Harga sudah nempel per bungkus. Pilih jumlahnya, langsung masuk keranjang.</p></div>
