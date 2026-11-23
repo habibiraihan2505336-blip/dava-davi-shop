@@ -30,7 +30,7 @@
     @else
         <div class="table-wrap">
             <table>
-                <caption>{{ $perBulan->count() }} bulan</caption>
+                <caption>Rekap pesanan per bulan</caption>
                 <thead>
                 <tr>
                     <th scope="col">Bulan</th>
@@ -70,15 +70,15 @@
     @else
         <div class="table-wrap">
             <table>
-                <caption>Lima produk dengan jumlah terjual terbanyak</caption>
+                <caption>Lima produk dengan jumlah terjual terbanyak, dihitung dalam bungkus</caption>
                 <thead>
-                <tr><th scope="col">Produk</th><th scope="col" class="num">Terjual (bungkus)</th><th scope="col" class="num">Nilai</th></tr>
+                <tr><th scope="col">Produk</th><th scope="col" class="num">Terjual</th><th scope="col" class="num">Nilai</th></tr>
                 </thead>
                 <tbody>
                 @foreach ($terlaris as $baris)
                     <tr>
                         <td data-label="Produk">{{ $baris['nama'] }}</td>
-                        <td class="num" data-label="Terjual (bungkus)">{{ $baris['terjual'] }}</td>
+                        <td class="num" data-label="Terjual">{{ $baris['terjual'] }}</td>
                         <td class="num" data-label="Nilai">Rp{{ number_format($baris['nilai'], 0, ',', '.') }}</td>
                     </tr>
                 @endforeach

@@ -27,7 +27,7 @@
         .stat-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:24px}
         .stat{min-width:0;padding:16px 18px;border:1px solid #d8c5a6;border-left:3px solid var(--gold);background:var(--paper)}
         .stat dt{margin:0 0 6px;color:var(--muted);font-size:12px;font-weight:700;letter-spacing:.4px;text-transform:uppercase}
-        .stat dd{margin:0;color:var(--brown-dark);font:500 32px/1 var(--serif)}
+        .stat dd{margin:0;color:var(--brown-dark);font:500 clamp(23px,5.4vw,32px)/1 var(--serif);overflow-wrap:anywhere}
         .stat dd small{display:block;margin-top:6px;color:var(--muted);font:12px var(--sans)}
         .table-wrap{overflow-x:auto;border:1px solid #d8c5a6;background:var(--paper)}
         table{width:100%;border-collapse:collapse;font-size:14px}
@@ -36,6 +36,7 @@
         th{background:#f4e9d6;color:var(--brown-dark);font-size:12px;letter-spacing:.4px;text-transform:uppercase;white-space:nowrap}
         tbody tr:last-child td{border-bottom:0}tbody tr:hover{background:#fdf7ea}
         .num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+        .total-row{border-top:2px solid var(--brown)}.total-row>*{background:#f4e9d6}
         .chip{display:inline-flex;align-items:center;gap:6px;padding:3px 9px;border:1px solid #a88e6f;border-radius:20px;font-size:12px;font-weight:700;white-space:nowrap}
         .chip.baru{border-color:#b06a2c;color:#7d4310}.chip.diproses{border-color:#4d6b8a;color:#2f4a63}.chip.selesai{border-color:#4f6b3a;color:#33481f}.chip.batal{border-color:#9b4a35;color:#6d2c1b}
         .chip.bayar{border-color:#4f6b3a;color:#33481f}.chip.belum{border-color:#b06a2c;color:#7d4310}
