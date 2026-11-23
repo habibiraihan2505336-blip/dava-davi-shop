@@ -60,6 +60,6 @@ php artisan test
 
 - `categories`, `products` (kategori, harga, stok, gambar, status aktif), `product_price_tiers` (harga grosir per ambang jumlah).
 - `customers` (nama, no HP, alamat, email, sandi hash opsional), `orders` (kode pesanan, tanggal, total, ongkir, status, status pembayaran), `order_items` (jumlah, harga satuan, subtotal hasil hitung database).
-- `admins` (nama, email, sandi hash, peran). Perubahan dari rancangan awal: kolom `password` ditambahkan dan kaitan `id` ke `auth.users` dilepas, lihat `sql/05_admin_login.sql`.
+- `admins` (nama, email, sandi hash, peran, token ingat saya). Perubahan dari rancangan awal: kolom `password` ditambahkan dan kaitan `id` ke `auth.users` dilepas (`sql/05_admin_login.sql`), kolom `remember_token` ditambahkan untuk opsi ingat saya (`sql/07_remember_token.sql`).
 
 Lihat `PRD.md` untuk sasaran dan kriteria penerimaan, `DESIGN.md` untuk arahan visual.

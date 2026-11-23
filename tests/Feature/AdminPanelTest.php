@@ -266,6 +266,19 @@ class AdminPanelTest extends TestCase
         $this->assertSame(0, $produk->priceTiers()->count());
     }
 
+    public function test_admin_dapat_masuk_dengan_opsi_ingat_saya(): void
+    {
+        $admin = $this->admin();
+
+        $this->post(route('admin.login.attempt'), [
+            'email' => $admin->email,
+            'password' => 'sandi-uji-123',
+            'ingat' => '1',
+        ])->assertRedirect(route('admin.dashboard'));
+
+        $this->assertNotNull(Admin::query()->where('email', $admin->email)->value('remember_token'));
+    }
+
     public function test_percobaan_masuk_admin_dibatasi(): void
     {
         $admin = $this->admin();

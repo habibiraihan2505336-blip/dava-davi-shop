@@ -106,6 +106,19 @@ class PelangganTest extends TestCase
             ->assertSee($produk->nama_produk);
     }
 
+    public function test_pembeli_dapat_masuk_dengan_opsi_ingat_saya(): void
+    {
+        $akun = $this->akun();
+
+        $this->post(route('pelanggan.login.attempt'), [
+            'email' => $akun->email,
+            'password' => 'sandi-uji-123',
+            'ingat' => '1',
+        ])->assertRedirect(route('akun.index'));
+
+        $this->assertNotNull(Customer::query()->where('email', $akun->email)->value('remember_token'));
+    }
+
     public function test_akun_tidak_bisa_dibuka_tanpa_masuk(): void
     {
         $this->get(route('akun.index'))->assertRedirect(route('pelanggan.login'));
