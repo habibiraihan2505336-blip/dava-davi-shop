@@ -25,6 +25,20 @@ return Application::configure(basePath: dirname(__DIR__))
 
             return route('shop.home');
         });
+
+        // Pengguna yang sudah masuk dan membuka halaman masuk diarahkan ke
+        // halaman yang sesuai, bukan ke beranda toko.
+        $middleware->redirectUsersTo(function (Request $request) {
+            if ($request->is('admin', 'admin/*')) {
+                return route('admin.dashboard');
+            }
+
+            if ($request->is('masuk', 'masuk/*')) {
+                return route('akun.index');
+            }
+
+            return route('shop.home');
+        });
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(
