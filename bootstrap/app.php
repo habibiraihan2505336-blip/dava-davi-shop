@@ -12,6 +12,14 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        // Aplikasi berjalan di belakang Cloudflare Tunnel (HTTPS diputus di
+        // Cloudflare), jadi header proxy dipercaya supaya tautan dan gambar
+        // yang dibuat Laravel memakai https, bukan http.
+        $middleware->trustProxies(at: '*', headers: Request::HEADER_X_FORWARDED_FOR
+            | Request::HEADER_X_FORWARDED_HOST
+            | Request::HEADER_X_FORWARDED_PORT
+            | Request::HEADER_X_FORWARDED_PROTO);
+
         // Tamu yang membuka /admin diarahkan ke halaman masuk pengelola,
         // bukan ke rute "login" bawaan yang tidak dipakai di aplikasi ini.
         $middleware->redirectGuestsTo(function (Request $request) {
