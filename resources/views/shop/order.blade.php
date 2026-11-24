@@ -8,7 +8,27 @@
     <p>Status pesanan: <strong>{{ $order->labelStatus() }}</strong></p>
     <p>Status pembayaran: <strong>{{ $order->labelPembayaran() }}</strong></p>
     @if ($order->payment_status === 'belum_bayar')
-        <p>Pesanan ini belum dibayar. Kabari penjual buat konfirmasi pembayaran, stok, ongkir, dan pengiriman.</p>
+        @if (filled(config('services.midtrans.server_key')))
+            <p>Pesanan ini belum dibayar. Kamu bisa bayar sekarang lewat Midtrans, atau kabari penjual kalau mau bayar manual.</p>
+            <form method="post" action="{{ route('pesanan.bayar', $order->kode_pesanan) }}" style="margin:0 0 14px">
+                @csrf
+                <button class="button" type="submit">Bayar sekarang</button>
+            </form>
+        @else
+            <p>Pesanan ini belum dibayar. Kabari penjual buat konfirmasi pembayaran, stok, ongkir, dan pengiriman.</p>
+        @endif
+    @elseif ($order->payment_status === 'menunggu')
+        <p>Pembayaran sedang menunggu penyelesaian. Kalau halaman pembayaran tertutup, buka lagi lewat tombol di bawah.</p>
+        @if ($order->payment_url)
+            <a class="button" href="{{ $order->payment_url }}">Lanjutkan pembayaran</a>
+        @endif
+        <a class="button secondary" href="{{ route('pesanan.cek-bayar', $order->kode_pesanan) }}">Cek status pembayaran</a>
+    @elseif ($order->payment_status === 'dibayar')
+        <p>Pembayaran diterima{{ $order->paid_at ? ' pada '.$order->paid_at->format('d-m-Y H:i') : '' }}. Pesanan akan diproses penjual.</p>
+    @elseif ($order->payment_status === 'gagal')
+        <p>Pembayaran terakhir gagal atau dibatalkan. Coba bayar lagi, atau kabari penjual.</p>
+    @elseif ($order->payment_status === 'kedaluwarsa')
+        <p>Batas waktu pembayaran sudah lewat. Kabari penjual kalau pesanan masih ingin dilanjutkan.</p>
     @endif
     <h2>Rincian</h2>
     @foreach ($order->items as $item)

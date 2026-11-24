@@ -30,6 +30,30 @@ Sandi acak hasil seeder disimpan di `storage/app/admin-akun.txt` (izin 600). Gan
 
 Login admin dibatasi 5 percobaan gagal per menit untuk setiap kombinasi email dan alamat IP.
 
+## Pembayaran daring (Midtrans Snap)
+
+Integrasi sudah terpasang, tetapi belum aktif karena kunci merchant belum diisi. Selama `MIDTRANS_SERVER_KEY` kosong, halaman pesanan menampilkan ajakan konfirmasi manual dan tombol bayar tidak muncul.
+
+```bash
+# .env
+MIDTRANS_SERVER_KEY=SB-Mid-server-xxxxxxxx
+MIDTRANS_CLIENT_KEY=SB-Mid-client-xxxxxxxx
+MIDTRANS_IS_PRODUCTION=false
+php artisan config:clear
+```
+
+Kunci diambil dari dashboard.midtrans.com (Settings, Access Keys). Alur yang dipakai:
+
+1. Pembeli menekan **Bayar sekarang** di halaman pesanan, aplikasi membuat transaksi Snap dan mengarahkan ke halaman pembayaran Midtrans.
+2. Setelah kembali, status dicek ulang lewat tombol **Cek status pembayaran** (`GET /pesanan/{kode}/cek-bayar`) karena callback `finish` tidak membawa status yang bisa dipercaya.
+3. Midtrans mengirim notifikasi ke `POST /pembayaran/notifikasi`. Endpoint ini memverifikasi `signature_key` (SHA-512 dari `order_id + status_code + gross_amount + server key`) sebelum mengubah data. Signature salah dijawab 403.
+
+Pemetaan status: `settlement`/`capture` menjadi `dibayar` (pesanan `baru` naik ke `diproses`, `paid_at` diisi), `pending` menjadi `menunggu`, `deny`/`cancel` menjadi `gagal`, `expire` menjadi `kedaluwarsa`, `refund` menjadi `dikembalikan`.
+
+Untuk mencoba notifikasi di laptop, jalankan `ngrok http 8123` lalu tempel `https://xxx.ngrok-free.app/pembayaran/notifikasi` di Settings, Payment, Notification URL. Tanpa kunci asli, jalur webhook tetap bisa diuji dengan server key dummy dan signature yang dihitung manual (lihat `tests/Feature/MidtransTest.php`).
+
+Berkas SQL `sql/08_payment_status.sql` menambah dua nilai status pembayaran (`menunggu`, `dikembalikan`) pada check constraint `orders_payment_status_check`.
+
 ## Fitur yang sudah jalan
 
 - Katalog dari basis data: filter kategori, pencarian, dialog detail, harga grosir bertingkat (`product_price_tiers`).

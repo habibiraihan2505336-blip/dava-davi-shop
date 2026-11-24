@@ -19,14 +19,16 @@ class Order extends Model
 
     public const PEMBAYARAN = [
         'belum_bayar' => 'Belum dibayar',
+        'menunggu' => 'Menunggu pembayaran',
         'dibayar' => 'Sudah dibayar',
         'gagal' => 'Gagal',
         'kedaluwarsa' => 'Kedaluwarsa',
+        'dikembalikan' => 'Dana dikembalikan',
     ];
 
     protected $fillable = [
         'customer_id', 'kode_pesanan', 'tanggal', 'total', 'ongkir', 'status',
-        'payment_status', 'payment_method', 'paid_at', 'catatan',
+        'payment_status', 'payment_method', 'paid_at', 'catatan', 'snap_token', 'payment_url',
     ];
 
     protected function casts(): array

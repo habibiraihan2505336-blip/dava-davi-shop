@@ -39,6 +39,10 @@ return Application::configure(basePath: dirname(__DIR__))
 
             return route('shop.home');
         });
+
+        // Notifikasi pembayaran datang dari server Midtrans, bukan dari form
+        // aplikasi, jadi tidak membawa token CSRF.
+        $middleware->validateCsrfTokens(except: ['pembayaran/notifikasi']);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

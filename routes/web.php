@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\PesananController;
 use App\Http\Controllers\Admin\ProdukController;
 use App\Http\Controllers\Pelanggan\AkunController;
 use App\Http\Controllers\Pelanggan\AuthController as PelangganAuthController;
+use App\Http\Controllers\PembayaranController;
 use App\Http\Controllers\ShopController;
 use Illuminate\Support\Facades\Route;
 
@@ -18,6 +19,16 @@ Route::delete('/keranjang/{product}', [ShopController::class, 'removeFromCart'])
 Route::get('/checkout', [ShopController::class, 'checkout'])->name('checkout.show');
 Route::post('/checkout', [ShopController::class, 'placeOrder'])->name('checkout.place');
 Route::get('/pesanan/{kode}', [ShopController::class, 'order'])->name('orders.show');
+
+// Pembayaran daring. Tanpa kunci Midtrans, tombol bayar hanya menampilkan
+// penjelasan dan alur manual tetap jalan.
+Route::post('/pesanan/{kode}/bayar', [PembayaranController::class, 'bayar'])
+    ->middleware('throttle:10,1')
+    ->name('pesanan.bayar');
+Route::get('/pesanan/{kode}/cek-bayar', [PembayaranController::class, 'cek'])
+    ->name('pesanan.cek-bayar');
+Route::post('/pembayaran/notifikasi', [PembayaranController::class, 'notifikasi'])
+    ->name('pembayaran.notifikasi');
 
 Route::prefix('masuk')->group(function () {
     Route::middleware('guest:pelanggan')->group(function () {
