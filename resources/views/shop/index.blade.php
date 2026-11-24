@@ -46,7 +46,6 @@
         <div class="empty filter-empty" hidden data-no-results><h2>Nggak ketemu</h2><p>Coba kata lain, atau pilih semua kategori.</p></div>
     @endif
 </section>
-<section class="story" id="cerita" aria-labelledby="story-heading"><div class="wrap story-inner"><div class="story-seal" aria-hidden="true"><span>D</span><small>DAVA DAVI</small></div><div><p class="kicker">Cerita</p><h2 id="story-heading">Dari Malang, buat teman santai kamu.</h2><p>Cerita lengkap Dava Davi belum masuk. Nanti diisi soal asal-usul dan cara bikinnya, langsung dari pemiliknya.</p><a href="#produk" class="text-link">Cek variannya</a></div></div></section>
 <dialog class="product-dialog" aria-labelledby="detail-title" data-product-dialog><form method="dialog"><button class="dialog-close" aria-label="Tutup detail produk">Tutup</button></form><p class="kicker">Detail varian</p><h2 id="detail-title" data-detail-title></h2><p data-detail-copy></p><p class="detail-price" data-detail-price></p><p class="placeholder-note">Harga dan stok dari data toko. Stok masih angka sementara.</p><form method="post" action="{{ route('cart.add') }}" class="dialog-buy" data-dialog-form>@csrf<input type="hidden" name="product_id" data-detail-id><p class="dialog-error" role="alert" data-dialog-error hidden></p><label for="detail-quantity">Jumlah</label><input id="detail-quantity" type="number" name="quantity" value="1" min="1" max="20"><button type="submit" class="button">Masukkan keranjang</button></form></dialog>
 <div class="toast" role="status" aria-live="polite" data-toast hidden></div>
 @endsection
